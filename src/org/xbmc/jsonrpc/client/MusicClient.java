@@ -652,6 +652,22 @@ public class MusicClient extends Client implements IMusicClient {
 			public int getWidth() {
 				return 0;
 			}
+			public ArrayList<String> getAudioStreams() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			public ArrayList<String> getSubtitleStreams() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			public int getActiveAudioStream() {
+				// TODO Auto-generated method stub
+				return -1;
+			}
+			public int getActiveSubtitleStream() {
+				// TODO Auto-generated method stub
+				return -1;
+			}
 		};
 	}
 }

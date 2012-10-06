@@ -180,4 +180,8 @@ public interface IControlManager extends IManager {
 	 * @return true on success, false otherwise.
 	 */
 	public void sendText(final DataResponse<Boolean> response, final String text, final Context context);
+	
+	public void setAudioStream(final DataResponse<Boolean> response, final int streamid, final Context context);
+	
+	public void setSubtitleStream(final DataResponse<Boolean> response, final int streamid, final Context context);
 }

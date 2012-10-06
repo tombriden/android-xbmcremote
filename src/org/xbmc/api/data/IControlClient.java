@@ -22,6 +22,7 @@
 package org.xbmc.api.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import org.xbmc.api.business.INotifiableManager;
 import org.xbmc.api.type.SeekType;
@@ -312,5 +313,13 @@ public interface IControlClient extends IClient {
 		
 		public int getWidth();
 		public int getHeight();
+		
+		public ArrayList<String> getAudioStreams();
+		public int getActiveAudioStream();
+		public ArrayList<String> getSubtitleStreams();
+		public int getActiveSubtitleStream();
 	}
+
+	public Boolean setAudioStream(INotifiableManager controlManager, int streamid);
+	public Boolean setSubtitleStream(INotifiableManager controlManager, int streamid);
 }

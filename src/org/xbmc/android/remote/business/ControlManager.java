@@ -302,4 +302,24 @@ public class ControlManager extends AbstractManager implements IControlManager, 
 			}
 		});
 	}
+
+	public void setAudioStream(final DataResponse<Boolean> response, final int streamid, final Context context) {
+		mHandler.post(new Command<Boolean>(response, this) {
+			@Override
+			public void doRun() throws Exception {
+				response.value = control(context).setAudioStream(ControlManager.this, streamid);
+			}
+		});
+		
+	}
+
+	public void setSubtitleStream(final DataResponse<Boolean> response, final int streamid, final Context context) {
+		mHandler.post(new Command<Boolean>(response, this) {
+			@Override
+			public void doRun() throws Exception {
+				response.value = control(context).setSubtitleStream(ControlManager.this, streamid);
+			}
+		});
+		
+	}
 }

@@ -512,6 +512,22 @@ public class VideoClient extends Client implements IVideoClient {
 					return 0;
 				}
 			}
+			public ArrayList<String> getAudioStreams() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			public int getActiveAudioStream() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			public ArrayList<String> getSubtitleStreams() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			public int getActiveSubtitleStream() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
 		};
 	}
 

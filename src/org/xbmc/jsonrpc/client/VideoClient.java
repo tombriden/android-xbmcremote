@@ -325,6 +325,30 @@ public class VideoClient extends Client implements IVideoClient {
 			public int getWidth() {
 				return 0;
 			}
+			public ArrayList<String> getAudioStreams(){
+				ArrayList<String> streams = new ArrayList<String>();
+				JsonNode jsonStreams = item.get("audiostreams");
+				for (Iterator<JsonNode> i = jsonStreams.getElements(); i.hasNext();) {
+					streams.add(getString((JsonNode)i.next(), "language"));
+				}
+				
+				return streams;
+			}
+			public int getActiveAudioStream(){
+				return getInt(player, "currentaudiostream");
+			}
+			public ArrayList<String> getSubtitleStreams(){				
+				ArrayList<String> streams = new ArrayList<String>();
+				JsonNode jsonStreams = item.get("subtitles");
+				for (Iterator<JsonNode> i = jsonStreams.getElements(); i.hasNext();) {
+					streams.add(getString((JsonNode)i.next(), "language"));
+				}
+				
+				return streams;
+			}
+			public int getActiveSubtitleStream(){
+				return getInt(player, "currentsubtitle");
+			}
 		};
 	}
 

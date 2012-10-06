@@ -21,6 +21,7 @@
 
 package org.xbmc.httpapi.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.xbmc.api.business.INotifiableManager;
@@ -443,6 +444,10 @@ public class ControlClient implements IControlClient {
 			public String getAlbum() { return ""; }
 			public int getHeight() { return 0; }
 			public int getWidth() { return 0; }
+			public ArrayList<String> getAudioStreams() { return null; }
+			public int getActiveAudioStream() { return 0; }
+			public ArrayList<String> getSubtitleStreams() { return null; }
+			public int getActiveSubtitleStream() { return 0; }
 		};
 		if (map == null)
 			return nothingPlaying;
@@ -478,5 +483,17 @@ public class ControlClient implements IControlClient {
 					return nothingPlaying;
 			}
 		}
+	}
+
+	public Boolean setAudioStream(INotifiableManager controlManager,
+			int streamid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Boolean setSubtitleStream(INotifiableManager controlManager,
+			int streamid) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

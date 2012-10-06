@@ -21,6 +21,8 @@
 
 package org.xbmc.android.remote.presentation.activity;
 
+import java.util.ArrayList;
+
 import org.xbmc.android.remote.R;
 import org.xbmc.android.remote.business.ManagerFactory;
 import org.xbmc.android.remote.presentation.controller.NowPlayingController;
@@ -34,6 +36,7 @@ import org.xbmc.api.object.Song;
 import org.xbmc.api.type.ThumbSize;
 import org.xbmc.eventclient.ButtonCodes;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -46,9 +49,11 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class NowPlayingActivity extends Activity {
@@ -60,6 +65,8 @@ public class NowPlayingActivity extends Activity {
 	private TextView mCounterRightView;
 	private ImageButton mPlayPauseView;
 	private SeekBar mSeekBar;
+	private Spinner mAudioStreamsView;
+	private Spinner mSubtitleStreamsView;
 
 	private ConfigurationManager mConfigurationManager;
 	private NowPlayingController mNowPlayingController;
@@ -108,6 +115,11 @@ public class NowPlayingActivity extends Activity {
 		mCounterLeftView = (TextView) findViewById(R.id.now_playing_counter_left);
 		mCounterRightView = (TextView) findViewById(R.id.now_playing_counter_right);
 		mPlayPauseView = (ImageButton) findViewById(R.id.MediaPlayPauseButton);
+		mAudioStreamsView = (Spinner) findViewById(R.id.now_playing_audio_streams);
+		mSubtitleStreamsView = (Spinner) findViewById(R.id.now_playing_subtitle_streams);
+		
+		mAudioStreamsView.setVisibility(View.INVISIBLE);
+		mSubtitleStreamsView.setVisibility(View.INVISIBLE);
 		
 //		JewelView jewelCase = (JewelView)findViewById(R.id.now_playing_jewelcase);
 		
@@ -134,6 +146,7 @@ public class NowPlayingActivity extends Activity {
   	  		findViewById(R.id.MediaNextButton),
   	  		findViewById(R.id.MediaPlaylistButton)
   	  	);
+  	  	mNowPlayingController.setupSpinners(mAudioStreamsView, mSubtitleStreamsView);
 
 	}
 
@@ -147,6 +160,36 @@ public class NowPlayingActivity extends Activity {
 		mTopTitleView.setText(topTitle);
 		mBottomTitleView.setText(bottomTitme);
 		mBottomSubtitleView.setText(bottomSubtitle);
+		
+	}
+	
+	public void updateAudioStreams(ArrayList<String> AudioStreams, int ActiveAudioStream){
+		if(AudioStreams == null || AudioStreams.size() <= 1){
+			mAudioStreamsView.setVisibility(View.INVISIBLE);
+			return;
+		}
+		else{
+			ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this.getBaseContext(), android.R.layout.simple_spinner_item, AudioStreams.toArray(new String[AudioStreams.size()]));
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
+			mAudioStreamsView.setAdapter(adapter);			
+			mAudioStreamsView.setSelection(ActiveAudioStream);
+			mAudioStreamsView.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	public void updateSubtitleStreams(ArrayList<String> SubtitleStreams, int ActiveSubtitleStream){
+		
+		if(SubtitleStreams == null || SubtitleStreams.size() == 1){
+			mSubtitleStreamsView.setVisibility(View.INVISIBLE);
+			return;
+		}
+		else{
+			ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this.getBaseContext(), android.R.layout.simple_spinner_item, SubtitleStreams.toArray(new String[SubtitleStreams.size()]));
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
+			mSubtitleStreamsView.setAdapter(adapter);			
+			mSubtitleStreamsView.setSelection(ActiveSubtitleStream);
+			mSubtitleStreamsView.setVisibility(View.VISIBLE);
+		}
 	}
 
 	public void updateProgress(int duration, int time) {
@@ -254,6 +297,7 @@ public class NowPlayingActivity extends Activity {
 		}
 	}
 
+	@SuppressLint("NewApi")
 	protected void callSuperOnKeyDown(int keyCode, KeyEvent event) {
 		onBackPressed();
 		super.onKeyDown(keyCode, event);

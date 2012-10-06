@@ -45,8 +45,11 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Spinner;
 
 public class NowPlayingController extends AbstractController implements INotifiableController, IController, Callback  {
 	
@@ -101,6 +104,14 @@ public class NowPlayingController extends AbstractController implements INotifia
 			case NowPlayingPollerThread.MESSAGE_COVER_CHANGED:
 				// TODO: FIX!!
 				mNowPlayingActivity.updateCover(ConnectionFactory.getNowPlayingPoller(mActivity).getNowPlayingCover(), (currentlyPlaying != null) ? currentlyPlaying.getMediaType() : MediaType.UNKNOWN);
+				return true;
+				
+			case NowPlayingPollerThread.MESSAGE_AUDIO_STREAM_CHANGED:
+				mNowPlayingActivity.updateAudioStreams(currentlyPlaying.getAudioStreams(), currentlyPlaying.getActiveAudioStream());
+				return true;
+				
+			case NowPlayingPollerThread.MESSAGE_SUBTITLE_STREAM_CHANGED:
+				mNowPlayingActivity.updateSubtitleStreams(currentlyPlaying.getSubtitleStreams(), currentlyPlaying.getActiveSubtitleStream());
 				return true;
 				
 			case NowPlayingPollerThread.MESSAGE_CONNECTION_ERROR:
@@ -180,6 +191,33 @@ public class NowPlayingController extends AbstractController implements INotifia
 			}
 		});
 	}
+	public void setupSpinners(final Spinner AudioStreams, final Spinner SubtitleStreams){
+		
+		AudioStreams.post(new Runnable() {
+			public void run() {
+				AudioStreams.setOnItemSelectedListener(new OnItemSelectedListener() {
+					public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+						mControlManager.setAudioStream(new DataResponse<Boolean>(), AudioStreams.getSelectedItemPosition(), mActivity.getApplicationContext());
+			        };
+					public void onNothingSelected(AdapterView<?> arg0) {
+					}
+				});
+			}
+		});
+		SubtitleStreams.post(new Runnable() {
+			public void run() {
+				SubtitleStreams.setOnItemSelectedListener(new OnItemSelectedListener() {
+					public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+						mControlManager.setSubtitleStream(new DataResponse<Boolean>(), SubtitleStreams.getSelectedItemPosition(), mActivity.getApplicationContext());
+			        };
+					public void onNothingSelected(AdapterView<?> arg0) {
+					}
+				});
+			}
+		});
+		
+	}
+	
 	public void seek(int progress) {
 		mControlManager.seek(new DataResponse<Boolean>(), SeekType.absolute, progress, mActivity.getApplicationContext());
 	}

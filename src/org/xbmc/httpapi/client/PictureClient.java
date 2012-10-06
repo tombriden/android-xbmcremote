@@ -21,6 +21,7 @@
 
 package org.xbmc.httpapi.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.xbmc.api.data.IControlClient.ICurrentlyPlaying;
@@ -117,6 +118,26 @@ public class PictureClient {
 				} catch (NumberFormatException e) {
 					return 0;
 				}
+			}
+
+			public ArrayList<String> getAudioStreams() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			public int getActiveAudioStream() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			public ArrayList<String> getSubtitleStreams() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			public int getActiveSubtitleStream() {
+				// TODO Auto-generated method stub
+				return 0;
 			}			
 		};
 	}

@@ -61,7 +61,24 @@
 					android:singleLine="true"
 					android:textSize="18dip"
 					android:textColor="#ffffffff" />
-					
+				<Spinner android:id="@+id/now_playing_audio_streams"
+					android:text="AUDIO STREAMS"
+					android:layout_weight="1.8" 
+					android:layout_height="0px"
+					android:layout_width="fill_parent" 
+					android:gravity="center_vertical|center_horizontal"
+					android:singleLine="true"
+					android:textSize="18dip"
+					android:textColor="#ffffffff" />
+				<Spinner android:id="@+id/now_playing_subtitle_streams"
+					android:text="SUBTITLE STREAMS"
+					android:layout_weight="1.8" 
+					android:layout_height="0px"
+					android:layout_width="fill_parent" 
+					android:gravity="center_vertical|center_horizontal"
+					android:singleLine="true"
+					android:textSize="18dip"
+					android:textColor="#ffffffff" />	
 				
 				<LinearLayout android:id="@+id/now_playing_jewelcontainer"
 					android:layout_weight="14" 

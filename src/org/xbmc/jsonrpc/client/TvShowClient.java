@@ -358,6 +358,41 @@ public class TvShowClient extends Client implements ITvShowClient {
 			public int getWidth() {
 				return 0;
 			}
+			public ArrayList<String> getAudioStreams(){
+				ArrayList<String> streams = new ArrayList<String>();
+				JsonNode jsonStreams = player.get("audiostreams");
+				if(jsonStreams != null){
+					for (Iterator<JsonNode> i = jsonStreams.getElements(); i.hasNext();) {
+						streams.add(getString((JsonNode)i.next(), "name"));
+					}
+				}
+				return streams;
+			}
+			public int getActiveAudioStream(){
+				if(player.get("currentaudiostream") != null){
+					return getInt(player.get("currentaudiostream"), "index");
+				}
+				else 
+					return 0;
+			}
+			public ArrayList<String> getSubtitleStreams(){			
+				ArrayList<String> streams = new ArrayList<String>();
+				streams.add("None");
+				JsonNode jsonStreams = player.get("subtitles");
+				if(jsonStreams != null){
+					for (Iterator<JsonNode> i = jsonStreams.getElements(); i.hasNext();) {
+						streams.add(getString((JsonNode)i.next(), "language"));
+					}
+				}
+				return streams;
+			}
+			public int getActiveSubtitleStream(){
+				if(player.get("currentsubtitle") != null){
+					return (getInt(player.get("currentsubtitle"), "index") + 1);
+				}
+				else 
+					return 0;
+			}
 		};
 	}
 	

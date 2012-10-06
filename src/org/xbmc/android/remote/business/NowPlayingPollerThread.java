@@ -69,6 +69,8 @@ public class NowPlayingPollerThread extends Thread {
 	public static final int MESSAGE_PLAYLIST_ITEM_CHANGED = 667;
 	public static final int MESSAGE_COVER_CHANGED = 668;
 	public static final int MESSAGE_PLAYSTATE_CHANGED = 669;
+	public static final int MESSAGE_AUDIO_STREAM_CHANGED = 670;
+	public static final int MESSAGE_SUBTITLE_STREAM_CHANGED = 671;
 
 	private IInfoClient mInfo;
 	private IControlClient mControl;
@@ -125,6 +127,8 @@ public class NowPlayingPollerThread extends Thread {
 		sendSingleMessage(handler, MESSAGE_PROGRESS_CHANGED, currPlaying);
 		sendSingleMessage(handler, MESSAGE_PLAYLIST_ITEM_CHANGED, currPlaying);
 		sendSingleMessage(handler, MESSAGE_COVER_CHANGED, currPlaying);
+		sendSingleMessage(handler, MESSAGE_AUDIO_STREAM_CHANGED, currPlaying);
+		sendSingleMessage(handler, MESSAGE_SUBTITLE_STREAM_CHANGED, currPlaying);
 		
 		mSubscribers.add(handler);
 	}
@@ -164,6 +168,8 @@ public class NowPlayingPollerThread extends Thread {
 	
 	public void run() {
 		String lastPos = "-1";
+		int lastAudioStream = -1;
+		int lastSubtitleStream = -1;
 		int lastPlayStatus = PlayStatus.UNKNOWN;
 		int currentPlayStatus = PlayStatus.UNKNOWN;
 		int currentMediaType = 0;
@@ -184,6 +190,8 @@ public class NowPlayingPollerThread extends Thread {
 					}
 					currentPlayStatus = currPlaying.getPlayStatus();
 					String currentPos = currPlaying.getTitle() + currPlaying.getDuration();
+					int currentAudioStream = currPlaying.getActiveAudioStream();
+					int currentSubtitleStream = currPlaying.getActiveSubtitleStream();
 					
 					// send changed status
 					if (currentPlayStatus == PlayStatus.PLAYING) {
@@ -201,6 +209,16 @@ public class NowPlayingPollerThread extends Thread {
 							sendMessage(MESSAGE_PLAYSTATE_CHANGED, currPlaying);
 							sendMessage(MESSAGE_PROGRESS_CHANGED, currPlaying);
 						}
+					}
+					
+					if(currentAudioStream != lastAudioStream){
+						lastAudioStream = currentAudioStream;
+						sendMessage(MESSAGE_AUDIO_STREAM_CHANGED, currPlaying);
+					}
+					
+					if(currentSubtitleStream != lastSubtitleStream){
+						lastSubtitleStream = currentSubtitleStream;
+						sendMessage(MESSAGE_SUBTITLE_STREAM_CHANGED, currPlaying);
 					}
 					
 					// play position changed?

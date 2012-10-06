@@ -21,6 +21,8 @@
 
 package org.xbmc.jsonrpc.client;
 
+import java.util.ArrayList;
+
 import org.codehaus.jackson.JsonNode;
 import org.xbmc.api.business.INotifiableManager;
 import org.xbmc.api.data.IControlClient;
@@ -405,6 +407,17 @@ public class ControlClient extends Client implements IControlClient {
 		return mConnection.getString(manager, "Player.Open", obj().p("item", obj().p("playlistid", playlistId))).equals("OK");
 	}
 	
+	public Boolean setAudioStream(INotifiableManager manager, int streamid) {
+		return mConnection.getString(manager, "Player.SetAudioStream", obj().p("playerid", getActivePlayerId(manager)).p("stream", streamid)).equals("OK");
+	}
+	
+	public Boolean setSubtitleStream(INotifiableManager manager, int streamid) {
+		if(streamid == 0)
+			return mConnection.getString(manager, "Player.SetSubtitle", obj().p("playerid", getActivePlayerId(manager)).p("subtitle", "off")).equals("OK");
+		else
+			return mConnection.getString(manager, "Player.SetSubtitle", obj().p("playerid", getActivePlayerId(manager)).p("subtitle", streamid-1).p("enable", true)).equals("OK");
+	}
+	
 	/**
 	 * Sets the correct response format to default values
 	 * @param manager Manager reference	 
@@ -443,6 +456,10 @@ public class ControlClient extends Client implements IControlClient {
 			public String getAlbum() { return ""; }
 			public int getHeight() { return 0; }
 			public int getWidth() { return 0; }
+			public ArrayList<String> getAudioStreams() { return null; }
+			public int getActiveAudioStream() { return 0; }
+			public ArrayList<String> getSubtitleStreams() { return null; }
+			public int getActiveSubtitleStream() { return 0; }
 		};
 		final JsonNode active = mConnection.getJson(manager, "Player.GetActivePlayers", null);
 		if(active.size() == 0)
@@ -450,7 +467,7 @@ public class ControlClient extends Client implements IControlClient {
 		
 		int playerid = getActivePlayerId(manager);
 		
-		final JsonNode player_details = mConnection.getJson(manager, "Player.GetProperties", obj().p("playerid", playerid).p(PARAM_PROPERTIES, arr().add("percentage").add("position").add("speed").add("time").add("totaltime").add("type")));
+		final JsonNode player_details = mConnection.getJson(manager, "Player.GetProperties", obj().p("playerid", playerid).p(PARAM_PROPERTIES, arr().add("audiostreams").add("currentaudiostream").add("currentsubtitle").add("percentage").add("position").add("speed").add("subtitles").add("time").add("totaltime").add("type")));
 		
 		if(player_details != null){
 			
