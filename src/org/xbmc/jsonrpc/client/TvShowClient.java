@@ -209,6 +209,42 @@ public class TvShowClient extends Client implements ITvShowClient {
 		return getEpisodes(manager, season.show, season, sortBy, sortOrder, hideWatched);
 	}
 	
+	public ArrayList<Episode> getRecentlyAddedEpisodes(INotifiableManager manager, boolean hideWatched) {
+		
+		ObjNode obj = obj().p(PARAM_PROPERTIES, arr().add("title").add("plot").add("rating").add("writer").add("firstaired").add("playcount").add("director").add("season").add("episode").add("file").add("showtitle").add("thumbnail"));
+		
+		final ArrayList<Episode> episodes = new ArrayList<Episode>();
+		final JsonNode result = mConnection.getJson(manager, "VideoLibrary.GetRecentlyAddedEpisodes", obj);
+		if(result.size() > 0){
+			final JsonNode jsonEpisodes = result.get("episodes");
+			for (Iterator<JsonNode> i = jsonEpisodes.getElements(); i.hasNext();) {
+				JsonNode jsonEpisode = (JsonNode)i.next();
+				
+				int playcount =getInt(jsonEpisode, "playcount");
+				if(playcount > 0 && hideWatched)
+					continue;
+				
+				episodes.add(new Episode(
+					getInt(jsonEpisode, "episodeid"),
+					getString(jsonEpisode, "title"),
+					getString(jsonEpisode, "plot"),
+					getDouble(jsonEpisode, "rating"),
+					getString(jsonEpisode, "writer"),
+					getString(jsonEpisode, "firstaired"),
+					playcount,
+					getString(jsonEpisode, "director"),
+					getInt(jsonEpisode, "season"),
+					getInt(jsonEpisode, "episode"),
+					"",
+					getString(jsonEpisode, "file"),
+					getString(jsonEpisode, "showtitle"),
+					getString(jsonEpisode, "thumbnail")
+				));
+			}
+		}
+		return episodes;
+	}
+	
 	/**
 	 * Gets all Episodes for all shows
 	 * @param manager
@@ -408,7 +444,7 @@ public class TvShowClient extends Client implements ITvShowClient {
 	public Bitmap getCover(INotifiableManager manager, ICoverArt cover, int size) {
 		
 		String url = null;
-		if(TvShow.getThumbUri(cover) != ""){
+		if(!TvShow.getThumbUri(cover).equals("")){
 			final JsonNode dl = mConnection.getJson(manager, "Files.PrepareDownload", obj().p("path", TvShow.getThumbUri(cover)));
 			if(dl != null){
 				JsonNode details = dl.get("details");
