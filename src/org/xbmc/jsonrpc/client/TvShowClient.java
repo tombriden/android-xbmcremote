@@ -423,7 +423,9 @@ public class TvShowClient extends Client implements ITvShowClient {
 				return streams;
 			}
 			public int getActiveSubtitleStream(){
-				if(player.get("currentsubtitle") != null){
+				if(!player.get("subtitleenabled").getBooleanValue())
+					return 0;
+				else if(player.get("currentsubtitle") != null){
 					return (getInt(player.get("currentsubtitle"), "index") + 1);
 				}
 				else 

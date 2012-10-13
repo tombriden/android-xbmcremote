@@ -467,7 +467,7 @@ public class ControlClient extends Client implements IControlClient {
 		
 		int playerid = getActivePlayerId(manager);
 		
-		final JsonNode player_details = mConnection.getJson(manager, "Player.GetProperties", obj().p("playerid", playerid).p(PARAM_PROPERTIES, arr().add("audiostreams").add("currentaudiostream").add("currentsubtitle").add("percentage").add("position").add("speed").add("subtitles").add("time").add("totaltime").add("type")));
+		final JsonNode player_details = mConnection.getJson(manager, "Player.GetProperties", obj().p("playerid", playerid).p(PARAM_PROPERTIES, arr().add("audiostreams").add("currentaudiostream").add("currentsubtitle").add("percentage").add("position").add("speed").add("subtitles").add("subtitleenabled").add("time").add("totaltime").add("type")));
 		
 		if(player_details != null){
 			
