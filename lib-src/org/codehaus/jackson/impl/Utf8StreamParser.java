@@ -7,8 +7,6 @@ import org.codehaus.jackson.io.IOContext;
 import org.codehaus.jackson.sym.*;
 import org.codehaus.jackson.util.*;
 
-import android.util.Log;
-
 /**
  * This is a concrete implementation of {@link JsonParser}, which is
  * based on a {@link java.io.InputStream} as the input source.
@@ -17,7 +15,6 @@ public final class Utf8StreamParser
     extends Utf8NumericParser
 {
     final static byte BYTE_LF = (byte) '\n';
-    private static final String TAG = "Utf8StreamParser-JsonRpc";
 
     /*
     /***************************************************
@@ -1469,10 +1466,7 @@ public final class Utf8StreamParser
         }
         int d = (int) _inputBuffer[_inputPtr++];
         if ((d & 0xC0) != 0x080) {
-        	//Invalid encoding - log and return space
-            Log.d(TAG, "2byte UTF decode:"+c+":"+d);
-            return INT_SPACE;
-            //_reportInvalidOther(d & 0xFF, _inputPtr);
+            _reportInvalidOther(d & 0xFF, _inputPtr);
         }
         return ((c & 0x1F) << 6) | (d & 0x3F);
     }
@@ -1486,10 +1480,7 @@ public final class Utf8StreamParser
         c1 &= 0x0F;
         int d = (int) _inputBuffer[_inputPtr++];
         if ((d & 0xC0) != 0x080) {
-        	//Invalid encoding - log and return space
-            Log.d(TAG, "3byte UTF decode 2nd byte:"+c1+":"+d);
-            return INT_SPACE;
-            //_reportInvalidOther(d & 0xFF, _inputPtr);
+            _reportInvalidOther(d & 0xFF, _inputPtr);
         }
         int c = (c1 << 6) | (d & 0x3F);
         if (_inputPtr >= _inputEnd) {
@@ -1497,10 +1488,7 @@ public final class Utf8StreamParser
         }
         d = (int) _inputBuffer[_inputPtr++];
         if ((d & 0xC0) != 0x080) {
-        	//Invalid encoding - log and return space
-            Log.d(TAG, "3byte UTF decode 3rd byte:"+c+":"+d);
-            return INT_SPACE;
-            //_reportInvalidOther(d & 0xFF, _inputPtr);
+            _reportInvalidOther(d & 0xFF, _inputPtr);
         }
         c = (c << 6) | (d & 0x3F);
         return c;
@@ -1512,18 +1500,12 @@ public final class Utf8StreamParser
         c1 &= 0x0F;
         int d = (int) _inputBuffer[_inputPtr++];
         if ((d & 0xC0) != 0x080) {
-        	//Invalid encoding - log and return space
-            Log.d(TAG, "3byte fast UTF decode 2nd byte:"+c1+":"+d);
-            return INT_SPACE;
-            //_reportInvalidOther(d & 0xFF, _inputPtr);
+            _reportInvalidOther(d & 0xFF, _inputPtr);
         }
         int c = (c1 << 6) | (d & 0x3F);
         d = (int) _inputBuffer[_inputPtr++];
         if ((d & 0xC0) != 0x080) {
-        	//Invalid encoding - log and return space
-            Log.d(TAG, "3byte fast UTF decode 3rd byte:"+c+":"+d);
-            return INT_SPACE;
-            //_reportInvalidOther(d & 0xFF, _inputPtr);
+            _reportInvalidOther(d & 0xFF, _inputPtr);
         }
         c = (c << 6) | (d & 0x3F);
         return c;
