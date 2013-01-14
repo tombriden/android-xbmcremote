@@ -219,7 +219,7 @@ public abstract class HostFactory {
 	 * @param activity Reference to current activity
 	 * @return Current host
 	 */
-	public static void readHost(Context context) {
+	public static Host readHost(Context context) {
 		int hostId = PreferenceManager.getDefaultSharedPreferences(context).getInt(SETTING_HOST_ID, -1);
 		if (hostId < 0) {
 			host = getHost(context);
@@ -227,6 +227,7 @@ public abstract class HostFactory {
 			host = getHost(context, hostId);
 		}
 		Log.i(TAG, "XBMC Host = " + (host == null ? "[host=null]" : host.addr));
+		return host;
 	}
 	
 	/**
